@@ -1,29 +1,48 @@
 from flask import Flask
 from flask import json
+import ast
 from flask_cors import CORS, cross_origin
 from flask import request
+from Vue4logsParser import *
 app = Flask(__name__)
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-def make_summary(conf, logs):
-    thisdict = [
-      {
-        "log_line": 'acquire lock=233570404, flags=0x1, tag="View Lock", name=com.android.systemui, ws=null, uid=10037, pid=2227',
-        "template": 'acquire lock=<*>, flags=<*>, tag="View Lock", name=<*>, ws=null, uid=<*>, pid=<*>'
-      },
-      {
-        "log_line": 'visible is system.call.count gt 0',
-        "template": 'visible is <*> gt <*>'
-      },
-    ]
-    return thisdict
 
+def list_logs(logs):
+    out = []
+    buff = []
+    for c in logs:
+        if c == '\n':
+            out.append(''.join(buff))
+            buff = []
+        else:
+            buff.append(c)
+    else:
+        if buff:
+            out.append(''.join(buff))
+
+    return out
+
+
+def make_summary(conf, logs):
+    conf = ast.literal_eval(conf)
+    # print('log_format: ', conf['threshold'])
+    logs = list_logs(logs)
+    # print(logs[0])
+
+    parser = Vue4Logs(conf, logs)
+
+    pa = parser.parse()
+    # print("pa: ",list(pa.T.to_dict().values()))
+    thisdict = list(pa.T.to_dict().values())
+    
+    return thisdict
 
 @app.route("/")
 @cross_origin()
 def hello():
-    data = make_summary()
+    data = make_summary("conf", "logs")
     response = app.response_class(
         response=json.dumps(data),
         status=200,
@@ -32,7 +51,8 @@ def hello():
     print(response.response)
     return response
 
-@app.route("/submit", methods = ['POST'])
+
+@app.route("/submit", methods=['POST'])
 @cross_origin()
 def parseLog():
     req = request.get_json()
@@ -42,7 +62,8 @@ def parseLog():
         status=200,
         mimetype='application/json'
     )
-    return response;
+    return response
+
 
 if __name__ == '__main__':
     app.run(debug=True)
