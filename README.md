@@ -2,10 +2,10 @@
 This will process each log line and sends the template relavent to each log line
 
 # Prerequities
-*flask
-*flask_cors
-*Python
-*pandas
+* flask
+* flask_cors
+* Python
+* pandas
 
 
 ## To run
