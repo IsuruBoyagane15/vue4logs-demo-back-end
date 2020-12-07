@@ -39,16 +39,15 @@ def make_summary(conf, logs):
     
     return thisdict
 
-@app.route("/")
+@app.route("/", methods=['GET'])
 @cross_origin()
 def hello():
-    data = make_summary("conf", "logs")
     response = app.response_class(
-        response=json.dumps(data),
+        response='Hi',
         status=200,
         mimetype='application/json'
     )
-    print(response.response)
+    print("response.response")
     return response
 
 
