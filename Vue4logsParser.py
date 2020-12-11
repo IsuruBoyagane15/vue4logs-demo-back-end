@@ -104,6 +104,7 @@ class Vue4Logs:
         self.inverted_index = VanillaInvertedIndex()
         self.results = []
         self.logs = logs
+        self.headers = []
        
 
     def get_new_template(self, temp_template):
@@ -116,10 +117,11 @@ class Vue4Logs:
         self.results.append(next_id)
         return next_id
 
-    def write_results(self):
-        df = pd.DataFrame()
-        df['Content'] = [str(i) for i in self.logs]
-        df['EventId'] = ["E" + str(i) for i in self.results]
+    def write_results(self,df_log):
+        
+        df_log['Log_line'] = [str(i) for i in self.logs]
+        df_log['EventId'] = ["E" + str(i) for i in self.results]
+        # df['Headers'] = [str(i) for i in self.headers]
         templates_df = []
         for j in self.results:
             if int(j) > 2000:
@@ -127,10 +129,11 @@ class Vue4Logs:
                 sys.exit(0)
             else:
                 templates_df.append(" ".join(self.templates[j]))
-        df['EventTemplate'] = templates_df
-
+        df_log['EventTemplate'] = templates_df
         
-        return df
+        print('df_log',df_log)
+        
+        return df_log
 
     def preprocess(self, line):
         regex = self.conf['regex']
@@ -232,7 +235,7 @@ class Vue4Logs:
                         self.results.append(selected_candidate_id)
                 assert len(self.results) == log_id
         # print(self.dataset)
-        output_df = self.write_results()
+        output_df = self.write_results(df_log)
         # ground_truth_df = 'ground_truth/' + self.dataset + '_2k.log_structured.csv'
         # output = self.output_path + "/" + self.dataset + "_structured.csv"
         
