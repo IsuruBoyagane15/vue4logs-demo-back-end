@@ -117,11 +117,14 @@ class Vue4Logs:
         self.results.append(next_id)
         return next_id
 
-    def write_results(self,df_log):
+    def write_results(self,df_log,headers):
         
         df_log['Log_line'] = [str(i) for i in self.logs]
         df_log['EventId'] = ["E" + str(i) for i in self.results]
-        # df['Headers'] = [str(i) for i in self.headers]
+        headers.remove('Content')
+        print('headers',headers)
+        # headers.remove('Content')
+        df_log['headers'] = df_log[headers].apply(lambda x: ' '.join(x), axis=1)
         templates_df = []
         for j in self.results:
             if int(j) > 2000:
@@ -131,7 +134,7 @@ class Vue4Logs:
                 templates_df.append(" ".join(self.templates[j]))
         df_log['EventTemplate'] = templates_df
         
-        print('df_log',df_log)
+        print('df_log',df_log['headers'])
         
         return df_log
 
@@ -146,6 +149,7 @@ class Vue4Logs:
     def parse(self):
         
         headers, regex = generate_logformat_regex(self.conf['log_format'])
+        print(headers)
         df_log = log_to_dataframe(self.logs, regex, headers)
         for idx, line in df_log.iterrows():
             log_id = line['LineId']
@@ -235,7 +239,7 @@ class Vue4Logs:
                         self.results.append(selected_candidate_id)
                 assert len(self.results) == log_id
         # print(self.dataset)
-        output_df = self.write_results(df_log)
+        output_df = self.write_results(df_log, headers)
         # ground_truth_df = 'ground_truth/' + self.dataset + '_2k.log_structured.csv'
         # output = self.output_path + "/" + self.dataset + "_structured.csv"
         
