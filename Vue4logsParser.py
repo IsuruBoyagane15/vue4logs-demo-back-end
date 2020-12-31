@@ -122,7 +122,7 @@ class Vue4Logs:
         df_log['Log_line'] = [str(i) for i in self.logs]
         df_log['EventId'] = ["E" + str(i) for i in self.results]
         headers.remove('Content')
-        print('headers',headers)
+        # print('headers',headers)
         # headers.remove('Content')
         try:
             df_log['headers'] = df_log[headers].apply(lambda x: ' '.join(x), axis=1)
@@ -138,7 +138,7 @@ class Vue4Logs:
                 templates_df.append(" ".join(self.templates[j]))
         df_log['EventTemplate'] = templates_df
         
-        print('df_log',df_log)
+        # print('df_log',df_log)
         
         return df_log
 

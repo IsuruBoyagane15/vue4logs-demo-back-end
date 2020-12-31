@@ -1,4 +1,5 @@
 from flask import Flask
+import pandas as pd
 from flask import json
 import ast
 from flask_cors import CORS, cross_origin
@@ -39,6 +40,19 @@ def make_summary(conf, logs):
     
     return thisdict
 
+def save_summary(res):
+    # print('hit',len(list(res.values())))
+    df_final = pd.DataFrame()
+    for i in list(res.values()):
+        print('==============')
+        df = pd.DataFrame(i)
+        print(df)
+        df_final = df_final.append(df[['headers','Content','EventTemplate', 'Log_line']],ignore_index=True)
+        print('==============')
+    print("--------",df_final,"-------------")
+    df_final.to_csv('results/test.csv')
+    return "Saves successfully"
+
 @app.route("/", methods=['GET'])
 @cross_origin()
 def hello():
@@ -63,6 +77,17 @@ def parseLog():
     )
     return response
 
+@app.route("/save", methods=['POST'])
+@cross_origin()
+def saveLog():
+    req = request.get_json()
+    data = save_summary(req)
+    response = app.response_class(
+        response=json.dumps(data),
+        status=200,
+        mimetype='application/json'
+    )
+    return response
 
 if __name__ == '__main__':
     app.run(debug=True)
