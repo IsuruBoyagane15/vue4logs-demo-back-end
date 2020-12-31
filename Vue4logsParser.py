@@ -124,7 +124,11 @@ class Vue4Logs:
         headers.remove('Content')
         print('headers',headers)
         # headers.remove('Content')
-        df_log['headers'] = df_log[headers].apply(lambda x: ' '.join(x), axis=1)
+        try:
+            df_log['headers'] = df_log[headers].apply(lambda x: ' '.join(x), axis=1)
+        except (TypeError, KeyError):
+            pass
+        
         templates_df = []
         for j in self.results:
             if int(j) > 2000:
@@ -134,7 +138,7 @@ class Vue4Logs:
                 templates_df.append(" ".join(self.templates[j]))
         df_log['EventTemplate'] = templates_df
         
-        print('df_log',df_log['headers'])
+        print('df_log',df_log)
         
         return df_log
 
