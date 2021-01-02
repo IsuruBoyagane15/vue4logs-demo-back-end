@@ -40,7 +40,7 @@ def make_summary(conf, logs):
     
     return thisdict
 
-def save_summary(res):
+def save_summary(res, fileName):
     # print('hit',len(list(res.values())))
     df_final = pd.DataFrame()
     for i in list(res.values()):
@@ -50,7 +50,7 @@ def save_summary(res):
         df_final = df_final.append(df[['headers','Content','EventTemplate', 'Log_line']],ignore_index=True)
         print('==============')
     print("--------",df_final,"-------------")
-    df_final.to_csv('results/test.csv')
+    df_final.to_csv('results/'+fileName+'.csv')
     return "Saves successfully"
 
 @app.route("/", methods=['GET'])
@@ -69,6 +69,7 @@ def hello():
 @cross_origin()
 def parseLog():
     req = request.get_json()
+    
     data = make_summary(req['conf'], req['logs'])
     response = app.response_class(
         response=json.dumps(data),
@@ -81,7 +82,8 @@ def parseLog():
 @cross_origin()
 def saveLog():
     req = request.get_json()
-    data = save_summary(req)
+    print("request:",req)
+    data = save_summary(req['logs'],req['fileName'])
     response = app.response_class(
         response=json.dumps(data),
         status=200,
