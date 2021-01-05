@@ -3,10 +3,10 @@
 1,Sun Dec 04 04:51:14 2005 notice,workerEnv.init() ok /etc/httpd/conf/workers2.properties,workerEnv.init() ok /etc/httpd/conf/workers<*>.properties,[Sun Dec 04 04:51:14 2005] [notice] workerEnv.init() ok /etc/httpd/conf/workers2.properties
 2,Sun Dec 04 04:51:14 2005 notice,workerEnv.init() ok /etc/httpd/conf/workers2.properties,workerEnv.init() ok /etc/httpd/conf/workers<*>.properties,[Sun Dec 04 04:51:14 2005] [notice] workerEnv.init() ok /etc/httpd/conf/workers2.properties
 3,Sun Dec 04 04:51:14 2005 notice,workerEnv.init() ok /etc/httpd/conf/workers2.properties,workerEnv.init() ok /etc/httpd/conf/workers<*>.properties,[Sun Dec 04 04:51:14 2005] [notice] workerEnv.init() ok /etc/httpd/conf/workers2.properties
-4,Sun Dec 04 04:51:18 2005 error,mod_jk child workerEnv in error state 6,mod_jk child workerEnv in error state <*>,[Sun Dec 04 04:51:18 2005] [error] mod_jk child workerEnv in error state 6
+4,Sun Dec 04 04:47:44 2005 error,mod_jk child workerEnv in error state 6,mod_jk child workerEnv in error state <*>,[Sun Dec 04 04:47:44 2005] [error] mod_jk child workerEnv in error state 6
 5,Sun Dec 04 04:51:18 2005 error,mod_jk child workerEnv in error state 6,mod_jk child workerEnv in error state <*>,[Sun Dec 04 04:51:18 2005] [error] mod_jk child workerEnv in error state 6
-6,Sun Dec 04 04:47:44 2005 error,mod_jk child workerEnv in error state 6,mod_jk child workerEnv in error state <*>,[Sun Dec 04 04:47:44 2005] [error] mod_jk child workerEnv in error state 6
+6,Sun Dec 04 04:51:18 2005 error,mod_jk child workerEnv in error state 6,mod_jk child workerEnv in error state <*>,[Sun Dec 04 04:51:18 2005] [error] mod_jk child workerEnv in error state 6
 7,Sun Dec 04 04:51:18 2005 error,mod_jk child workerEnv in error state 6,mod_jk child workerEnv in error state <*>,[Sun Dec 04 04:51:18 2005] [error] mod_jk child workerEnv in error state 6
-8,Sun Dec 04 04:51:08 2005 notice,jk2_init() Found child 6725 in scoreboard slot 10,jk<*>_init() Found child <*> in scoreboard slot <*>,[Sun Dec 04 04:51:08 2005] [notice] jk2_init() Found child 6725 in scoreboard slot 10
-9,Sun Dec 04 04:51:09 2005 notice,jk2_init() Found child 6726 in scoreboard slot 8,jk<*>_init() Found child <*> in scoreboard slot <*>,[Sun Dec 04 04:51:09 2005] [notice] jk2_init() Found child 6726 in scoreboard slot 8
-10,Sun Dec 04 04:51:09 2005 notice,jk2_init() Found child 6728 in scoreboard slot 6,jk<*>_init() Found child <*> in scoreboard slot <*>,[Sun Dec 04 04:51:09 2005] [notice] jk2_init() Found child 6728 in scoreboard slot 6
+8,Sun Dec 04 04:51:09 2005 notice,jk2_init() Found child 6728 in scoreboard slot 6,cc,[Sun Dec 04 04:51:09 2005] [notice] jk2_init() Found child 6728 in scoreboard slot 6
+9,Sun Dec 04 04:51:08 2005 notice,jk2_init() Found child 6725 in scoreboard slot 10,dcsdc,[Sun Dec 04 04:51:08 2005] [notice] jk2_init() Found child 6725 in scoreboard slot 10
+10,Sun Dec 04 04:51:09 2005 notice,jk2_init() Found child 6726 in scoreboard slot 8,dcsdc,[Sun Dec 04 04:51:09 2005] [notice] jk2_init() Found child 6726 in scoreboard slot 8

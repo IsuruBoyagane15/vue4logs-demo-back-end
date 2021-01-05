@@ -99,13 +99,12 @@ def get_tfidf(doc_ids, temp):
 class Vue4Logs:
     def __init__(self, conf, logs):
         self.conf = conf
-        self.threshold = conf['threshold']
+        self.threshold = 0.82  # conf['threshold']
         self.templates = {}
         self.inverted_index = VanillaInvertedIndex()
         self.results = []
         self.logs = logs
         self.headers = []
-       
 
     def get_new_template(self, temp_template):
         if len(self.templates.keys()) == 0:
@@ -117,18 +116,19 @@ class Vue4Logs:
         self.results.append(next_id)
         return next_id
 
-    def write_results(self,df_log,headers):
-        
+    def write_results(self, df_log, headers):
+
         df_log['Log_line'] = [str(i) for i in self.logs]
         df_log['EventId'] = ["E" + str(i) for i in self.results]
         headers.remove('Content')
         # print('headers',headers)
         # headers.remove('Content')
         try:
-            df_log['headers'] = df_log[headers].apply(lambda x: ' '.join(x), axis=1)
+            df_log['headers'] = df_log[headers].apply(
+                lambda x: ' '.join(x), axis=1)
         except (TypeError, KeyError):
             pass
-        
+
         templates_df = []
         for j in self.results:
             if int(j) > 2000:
@@ -137,23 +137,86 @@ class Vue4Logs:
             else:
                 templates_df.append(" ".join(self.templates[j]))
         df_log['EventTemplate'] = templates_df
-        
+
         # print('df_log',df_log)
-        
+
         return df_log
 
     def preprocess(self, line):
-        regex = self.conf['regex']
+        rgx = {
+            'HDFS': {
+                'regex': [r'blk_-?\d+', r'(\d+\.){3}\d+(:\d+)?']
+            },
+
+            'Hadoop': {
+                'regex': [r'(\d+\.){3}\d+']
+            },
+
+            'Spark': {
+                'regex': [r'(\d+\.){3}\d+', r'\b[KGTM]?B\b', r'([\w-]+\.){2,}[\w-]+']
+            },
+
+            'Zookeeper': {
+                'regex': [r'(/|)(\d+\.){3}\d+(:\d+)?']
+            },
+
+            'BGL': {
+                'regex': [r'core\.\d+']
+            },
+
+            'HPC': {
+                'regex': [r'=\d+']
+            },
+
+            'Thunderbird': {
+                'regex': [r'(\d+\.){3}\d+']
+            },
+
+            'Windows': {
+                'regex': [r'0x.*?\s']
+            },
+
+            'Linux': {
+                'regex': [r'(\d+\.){3}\d+', r'\d{2}:\d{2}:\d{2}']
+            },
+
+            'Android': {
+                'regex': [r'(/[\w-]+)+', r'([\w-]+\.){2,}[\w-]+', r'\b(\-?\+?\d+)\b|\b0[Xx][a-fA-F\d]+\b|\b[a-fA-F\d]{4,}\b']
+            },
+
+            'HealthApp': {
+                'regex': []
+            },
+
+            'Apache': {
+                'regex': [r'(\d+\.){3}\d+']
+            },
+
+            'Proxifier': {
+                'regex': [r'<\d+\ssec', r'([\w-]+\.)+[\w-]+(:\d+)?', r'\d{2}:\d{2}(:\d{2})*', r'[KGTM]B']
+            },
+
+            'OpenSSH': {
+                'regex': [r'(\d+\.){3}\d+', r'([\w-]+\.){2,}[\w-]+']
+            },
+
+            'OpenStack': {
+                'regex': [r'((\d+\.){3}\d+,?)+', r'/.+?\s', r'\d+']
+            },
+
+            'Mac': {
+                'regex': [r'([\w-]+\.){2,}[\w-]+']
+            }
+        }
+        regex = rgx[self.conf['log_file']]['regex']
         for currentRex in regex:
             line = re.sub(currentRex, '<*>', line)
         return line
 
-    
-
     def parse(self):
-        
+
         headers, regex = generate_logformat_regex(self.conf['log_format'])
-        print(headers)
+        # print(headers)
         df_log = log_to_dataframe(self.logs, regex, headers)
         for idx, line in df_log.iterrows():
             log_id = line['LineId']
@@ -246,7 +309,7 @@ class Vue4Logs:
         output_df = self.write_results(df_log, headers)
         # ground_truth_df = 'ground_truth/' + self.dataset + '_2k.log_structured.csv'
         # output = self.output_path + "/" + self.dataset + "_structured.csv"
-        
+
         # print(self.dataset, pa)
         # print(self.inverted_index.dict)
         # print(self.dataset, len(self.templates), "\n")
